@@ -2,13 +2,33 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../assets/bg.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(5px);
+  opacity: 0.5;
 }
 
 .auth-form {
   padding: 2rem;
   border: 1px solid #ccc;
   border-radius: 10px;
+  background-color: white;
+  z-index: 1;
 }
 
 .auth-form button{

@@ -8,14 +8,17 @@ const Navbar = () => {
   const { token, logout } = useContext(AuthContext);
 
   return (
-    <AppBar position="static">
+    <AppBar style={{background:"#579191ff", position: "relative", zIndex: 2}} position="static">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+        <Typography variant="h6" component={Link} to="/" sx={{ flexGrow: 1, color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>
           Bank App
         </Typography>
         <Button color="inherit" component={Link} to="/">Home</Button>
         {token ? (
-          <Button color="inherit" onClick={logout}>Logout</Button>
+          <>
+            <Button color="inherit" component={Link} to="/accounts">Accounts</Button>
+            <Button color="inherit" onClick={logout}>Logout</Button>
+          </>
         ) : (
           <>
             <Button color="inherit" component={Link} to="/login">Login</Button>
