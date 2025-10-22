@@ -27,7 +27,7 @@ const LockersPage = () => {
     userInfo,
   } = useContext(DataContext);
 
-  const [assignData, setAssignData] = useState({ amount: '', termMonths: '' });
+  const [assignLockerId, setAssignLockerId] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -39,18 +39,14 @@ const LockersPage = () => {
     }
   }, [userInfo]);
 
-  const handleAssignChange = (e) => {
-    setAssignData({ ...assignData, [e.target.name]: e.target.value });
-  };
-
   const handleAssignSubmit = async (e) => {
     e.preventDefault();
     try {
-      await assignLocker(assignData);
+      await assignLocker(assignLockerId);
       setSnackbarMessage('Locker assigned successfully!');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
-      setAssignData({ amount: '', termMonths: '' });
+      setAssignLockerId('');
     } catch (error) {
       setSnackbarMessage('Failed to assign locker.');
       setSnackbarSeverity('error');
@@ -67,6 +63,9 @@ const LockersPage = () => {
 
   return (
     <Container>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Lockers
+      </Typography>
       <Grid container spacing={3}>
         {/* My Locker */}
         <Grid item xs={12}>
@@ -94,6 +93,7 @@ const LockersPage = () => {
               <Table>
                 <TableHead>
                   <TableRow>
+                    <TableCell>Locker ID</TableCell>
                     <TableCell>Locker Number</TableCell>
                     <TableCell>Location</TableCell>
                     <TableCell>Size</TableCell>
@@ -103,6 +103,7 @@ const LockersPage = () => {
                   {availableLockers.length > 0 ? (
                     availableLockers.map((locker) => (
                       <TableRow key={locker.id}>
+                        <TableCell>{locker.id}</TableCell>
                         <TableCell>{locker.lockerNumber}</TableCell>
                         <TableCell>{locker.location}</TableCell>
                         <TableCell>{locker.size}</TableCell>
@@ -110,7 +111,7 @@ const LockersPage = () => {
                     ))
                   ) : (
                     <TableRow>
-                      <TableCell colSpan={3} align="center">
+                      <TableCell colSpan={4} align="center">
                         No available lockers.
                       </TableCell>
                     </TableRow>
@@ -131,22 +132,10 @@ const LockersPage = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <TextField
-                    label="Amount"
-                    name="amount"
-                    type="number"
-                    value={assignData.amount}
-                    onChange={handleAssignChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    label="Term (Months)"
-                    name="termMonths"
-                    type="number"
-                    value={assignData.termMonths}
-                    onChange={handleAssignChange}
+                    label="Locker ID"
+                    name="lockerId"
+                    value={assignLockerId}
+                    onChange={(e) => setAssignLockerId(e.target.value)}
                     fullWidth
                     required
                   />

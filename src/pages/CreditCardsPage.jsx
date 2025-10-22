@@ -26,8 +26,8 @@ const CreditCardsPage = () => {
     userInfo,
   } = useContext(DataContext);
 
-  const [applyData, setApplyData] = useState({ fromAccountNumber: '', toAccountNumber: '', amount: '' });
-  const [paymentData, setPaymentData] = useState({ creditLimit: '' });
+  const [applyCreditLimit, setApplyCreditLimit] = useState('');
+  const [paymentData, setPaymentData] = useState({ cardNumber: '', amount: '' });
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState('success');
@@ -38,10 +38,6 @@ const CreditCardsPage = () => {
     }
   }, [userInfo]);
 
-  const handleApplyChange = (e) => {
-    setApplyData({ ...applyData, [e.target.name]: e.target.value });
-  };
-
   const handlePaymentChange = (e) => {
     setPaymentData({ ...paymentData, [e.target.name]: e.target.value });
   };
@@ -49,11 +45,11 @@ const CreditCardsPage = () => {
   const handleApplySubmit = async (e) => {
     e.preventDefault();
     try {
-      await applyForCreditCard(applyData);
+      await applyForCreditCard({ creditLimit: applyCreditLimit });
       setSnackbarMessage('Credit card application submitted successfully!');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
-      setApplyData({ fromAccountNumber: '', toAccountNumber: '', amount: '' });
+      setApplyCreditLimit('');
     } catch (error) {
       setSnackbarMessage('Credit card application failed.');
       setSnackbarSeverity('error');
@@ -68,7 +64,7 @@ const CreditCardsPage = () => {
       setSnackbarMessage('Payment successful!');
       setSnackbarSeverity('success');
       setOpenSnackbar(true);
-      setPaymentData({ creditLimit: '' });
+      setPaymentData({ cardNumber: '', amount: '' });
     } catch (error) {
       setSnackbarMessage('Payment failed.');
       setSnackbarSeverity('error');
@@ -99,7 +95,7 @@ const CreditCardsPage = () => {
                     <TableCell>Card Number</TableCell>
                     <TableCell>Card Holder</TableCell>
                     <TableCell>Expiry Date</TableCell>
-                    <TableCell>Balance</TableCell>
+                    <TableCell>Outstanding Balance</TableCell>
                     <TableCell>Credit Limit</TableCell>
                   </TableRow>
                 </TableHead>
@@ -108,10 +104,10 @@ const CreditCardsPage = () => {
                     creditCards.map((card) => (
                       <TableRow key={card.id}>
                         <TableCell>{card.cardNumber}</TableCell>
-                        <TableCell>{card.cardHolderName}</TableCell>
+                        <TableCell>{card.user?.username}</TableCell>
                         <TableCell>{new Date(card.expiryDate).toLocaleDateString()}</TableCell>
-                        <TableCell>${card.balance.toFixed(2)}</TableCell>
-                        <TableCell>${card.creditLimit.toFixed(2)}</TableCell>
+                        <TableCell>${(card.outstandingBalance || 0).toFixed(2)}</TableCell>
+                        <TableCell>${(card.creditLimit || 0).toFixed(2)}</TableCell>
                       </TableRow>
                     ))
                   ) : (
@@ -137,31 +133,11 @@ const CreditCardsPage = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    label="From Account Number"
-                    name="fromAccountNumber"
-                    value={applyData.fromAccountNumber}
-                    onChange={handleApplyChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="To Account Number"
-                    name="toAccountNumber"
-                    value={applyData.toAccountNumber}
-                    onChange={handleApplyChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    label="Amount"
-                    name="amount"
+                    label="Credit Limit"
+                    name="creditLimit"
                     type="number"
-                    value={applyData.amount}
-                    onChange={handleApplyChange}
+                    value={applyCreditLimit}
+                    onChange={(e) => setApplyCreditLimit(e.target.value)}
                     fullWidth
                     required
                   />
@@ -186,10 +162,20 @@ const CreditCardsPage = () => {
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <TextField
-                    label="Credit Limit"
-                    name="creditLimit"
+                    label="Card Number"
+                    name="cardNumber"
+                    value={paymentData.cardNumber}
+                    onChange={handlePaymentChange}
+                    fullWidth
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Amount"
+                    name="amount"
                     type="number"
-                    value={paymentData.creditLimit}
+                    value={paymentData.amount}
                     onChange={handlePaymentChange}
                     fullWidth
                     required

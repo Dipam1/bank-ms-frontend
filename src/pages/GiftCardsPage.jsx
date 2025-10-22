@@ -104,6 +104,9 @@ const GiftCardsPage = () => {
 
   return (
     <Container>
+      <Typography variant="h4" component="h1" gutterBottom>
+        Gift Cards
+      </Typography>
       <Grid container spacing={3}>
         {/* Create Gift Card */}
         <Grid item xs={12} md={6}>

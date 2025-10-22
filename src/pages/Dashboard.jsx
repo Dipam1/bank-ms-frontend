@@ -69,6 +69,7 @@ const Dashboard = () => {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
+            backgroundColor: "#f4f6f8",
           },
         }}
       >
@@ -76,14 +77,14 @@ const Dashboard = () => {
         <Box sx={{ overflow: "auto" }}>
           <List>
             {menuItems.map((item) => (
-              <ListItem
-                style={{ cursor: "pointer" }}
-                button
-                key={item.text}
-                onClick={() => navigate(item.path)}
-              >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+              <ListItem button key={item.text} onClick={() => navigate(item.path)}>
+                <ListItemIcon sx={{ color: "#637381" }}>{item.icon}</ListItemIcon>
+                <ListItemText
+                  primaryTypographyProps={{
+                    sx: { color: "#637381", fontWeight: "bold" },
+                  }}
+                  primary={item.text}
+                />
               </ListItem>
             ))}
           </List>

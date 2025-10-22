@@ -66,6 +66,15 @@ const LoginPage = () => {
           <Button type="submit" variant="contained" color="primary" fullWidth>
             Login
           </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            fullWidth
+            onClick={() => navigate('/register')}
+            style={{ marginTop: '1rem' }}
+          >
+            Register
+          </Button>
         </form>
       </Container>
     </div>
